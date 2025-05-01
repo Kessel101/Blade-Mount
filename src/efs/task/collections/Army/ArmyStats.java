@@ -13,12 +13,33 @@ public class ArmyStats {
     private double speed; // avg
     private int quantity;
 
+    public double getDamege() {
+        return damege;
+    }
+
+    public double getDefense() {
+        return defense;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public int getSumOfSpeed() {
+        return sum_of_speed;
+    }
+
     public ArmyStats(double damege, double defense, int sum_of_speed, int quantity) {
         this.damege = damege;
         this.defense = defense;
         this.sum_of_speed = sum_of_speed;
         this.quantity = quantity;
-        this.speed = sum_of_speed / quantity;
+        this.speed = quantity == 0 ? 0 : (double) sum_of_speed / quantity;
+
     }
 
     public void update_stats_by_unit(Stats stats) {

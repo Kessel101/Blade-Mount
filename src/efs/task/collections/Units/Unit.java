@@ -23,6 +23,7 @@ public class Unit {
             default:
                 break;
         }
+        this.typeOfUnit = type;
     }
 
     public int getDamege() {
