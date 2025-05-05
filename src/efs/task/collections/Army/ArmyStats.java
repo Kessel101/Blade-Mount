@@ -49,8 +49,47 @@ public class ArmyStats {
         this.quantity += 1;
         this.speed = (double)sum_of_speed / quantity;
     }
+    // Dodaje podsumowane statystyki innej grupy jednostek
+    public void update_stats_by_unit(ArmyStats other) {
+        this.damege += other.damege;
+        this.defense += other.defense;
+        this.sum_of_speed += other.sum_of_speed;
+        this.quantity += other.quantity;
+        this.speed = quantity > 0 ? (double) sum_of_speed / quantity : 0;
+    }
 
     public void calculate_speed() {
         this.speed /= quantity;
+    }
+
+    public void removeUnits(int count) {
+        if (count >= quantity) {
+            // usuwamy wszystkie jednostki
+            quantity = 0;
+            damege = 0;
+            defense = 0;
+            sum_of_speed = 0;
+            speed = 0;
+        } else {
+            // usuwamy proporcjonalnie
+            double unitDmg = damege / quantity;
+            double unitDef = defense / quantity;
+            double unitSpeed = (double) sum_of_speed / quantity;
+
+            damege -= unitDmg * count;
+            defense -= unitDef * count;
+            sum_of_speed -= unitSpeed * count;
+            quantity -= count;
+            speed = quantity == 0 ? 0 : (double) sum_of_speed / quantity;
+        }
+    }
+
+
+    public void upgradeStats(int i, int i1, int i2) {
+        damege += i ;
+        defense += i1 ;
+        sum_of_speed += i2 ;
+        speed = quantity == 0 ? 0 : (double) sum_of_speed / quantity;
+
     }
 }

@@ -13,9 +13,9 @@ public class Retinue {
     private int x;
     private int y;
 
-    private Hero owner;
-    private ArmyStats overal_army_tats;
-    private HashMap<TypeOfUnit, ArmyStats> stats = new HashMap();
+    public Hero owner;
+    public ArmyStats overal_army_tats;
+    public HashMap<TypeOfUnit, ArmyStats> stats = new HashMap();
 
     public Retinue(Hero owner,ArrayList<Unit> units,int x,int y) {
         this.x = x;
@@ -73,4 +73,12 @@ public class Retinue {
         x += dx;
         y += dy;
     }
+
+    public void recalculateOverallStats() {
+        overal_army_tats = new ArmyStats(0, 0, 0, 0);
+        for (ArmyStats s : stats.values()) {
+            overal_army_tats.update_stats_by_unit(s);
+        }
+    }
+
 }

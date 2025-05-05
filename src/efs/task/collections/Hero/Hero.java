@@ -20,7 +20,16 @@ public class Hero {
         return name;
     }
 
-    public int getDucats() {
+    public int getDukaty() {
         return ducats;
+    }
+
+
+    public void removeDukaty(int i) {
+        ducats -= i;
+    }
+
+    public void giveDukaty(int i) {
+        ducats += i;
     }
 }
