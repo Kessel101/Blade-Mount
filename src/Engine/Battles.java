@@ -61,9 +61,9 @@ public class Battles {
             //RetinueMenager.remove(r2);
         }
 
-        System.out.println("\n📊 Stan armii po bitwie:");
-        r1.displayArmyStats();
-        r2.displayArmyStats();
+        //System.out.println("\n📊 Stan armii po bitwie:");
+       // r1.displayArmyStats();
+        //r2.displayArmyStats();
 
 
     }

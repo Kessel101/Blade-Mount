@@ -1,7 +1,10 @@
 
+import Map.GameMap;
 import efs.task.collections.Army.Retinue;
 import efs.task.collections.Army.RetinueMenager;
+import efs.task.collections.Army.RetinueUtils;
 import efs.task.collections.Hero.Hero;
+import efs.task.collections.Hero.HeroClass;
 import efs.task.collections.Hero.HeroStats;
 import Engine.TurnManager;
 import efs.task.collections.Units.TypeOfUnit;
@@ -9,18 +12,32 @@ import efs.task.collections.Units.Unit;
 
 import java.util.ArrayList;
 
+import static Engine.PlayerChoice.scanner;
+
 
 public class Main {
     public static void main(String[] args) {
 
         //RetinueMenager retinueMenager = new RetinueMenager();
-        Hero hero = new Hero("Alexander", 500, HeroStats.builder().total_leader(5,5,5).build());
+        System.out.println("🎖️ Wybierz klasę swojego bohatera:");
+        HeroClass[] classes = HeroClass.values();
+        for (int i = 0; i < classes.length; i++) {
+            System.out.println(i + ". " + classes[i]);
+        }
+        int choice = scanner.nextInt();
+        HeroClass heroClass = HeroClass.values()[choice];
+
+        HeroStats heroStats0 = new HeroStats(2, 4, 3);
+
+        Hero hero = new Hero("Gracz", 300, heroStats0, heroClass);
+
+        //Hero hero = new Hero("Alexander", 500, HeroStats.builder().total_leader(5,5,5).build(), HeroClass.WARLORD);
 
         HeroStats heroStats1 = new HeroStats(2, 4, 3);
-        Hero hero1 = new Hero("Cesar", 500, heroStats1);
+        Hero hero1 = new Hero("Cesar", 500, heroStats1, HeroClass.DEFENDER);
 
         HeroStats heroStats2 = new HeroStats(4, 5, 1);
-        Hero hero2 = new Hero("Crassus", 500, heroStats2);
+        Hero hero2 = new Hero("Adoolf", 500, heroStats2, HeroClass.ARCHMASTER);
 
         ArrayList<Unit> unitsAlex = new ArrayList<Unit>();
         unitsAlex.add(new Unit(TypeOfUnit.INFANTRY, 1)); // Level 0
@@ -29,6 +46,7 @@ public class Main {
 
         Retinue player = new Retinue(hero, unitsAlex,1,1);
         RetinueMenager.setPlayer(player);
+        RetinueUtils.applyHeroClassBonus(player);
 
         ArrayList<Unit> unitsCesar = new ArrayList<Unit>();
         unitsCesar.add(new Unit(TypeOfUnit.INFANTRY, 1)); // Level 0
@@ -49,9 +67,14 @@ public class Main {
         // Retinue Alexander_Retinue = new Retinue();
         //player.displayArmyStats();
         //retinue1.displayArmyStats();
+        GameMap.placeTreasure(RetinueMenager.getList());
+        //bufyy zwiazane z klasa postaci
+        for (Retinue retinue : RetinueMenager.getList()) {
+            RetinueUtils.applyHeroClassBonus(retinue);
+        }
 
 
-        for(int i=0; i<3;i++){
+        for(int i=0; i<100;i++){
             TurnManager.nextTurn();
 
         }

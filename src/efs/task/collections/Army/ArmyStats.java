@@ -92,4 +92,11 @@ public class ArmyStats {
         speed = quantity == 0 ? 0 : (double) sum_of_speed / quantity;
 
     }
+
+    public double totalPower() {
+         int total = (int) (damege + defense + speed);
+         return total;
+    }
+
 }
+
