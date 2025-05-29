@@ -9,6 +9,8 @@ import efs.task.collections.Units.Unit;
 
 import java.util.Scanner;
 
+import static efs.task.collections.Army.RetinueUtils.applyHeroClassBonusByUnit;
+import static efs.task.collections.Units.Data.*;
 
 
 public class PlayerChoice {
@@ -176,19 +178,73 @@ public class PlayerChoice {
 
         System.out.println("⚔️ Ulepszanie jednostek (+1 do dmg/def/speed) wszystkich w typie:");
         for (TypeOfUnit type : TypeOfUnit.values()) {
-            System.out.println(type.ordinal() + ". " + type);
+            System.out.print((type.ordinal() + 1) + " " + type + " ,obecny poziom: " + player.stats.get(type).getLevel());
+            switch (type) {
+                case INFANTRY -> {
+                    if(player.stats.get(type).getLevel() == 3) {
+                        System.out.println(", osiagnieto poziom maksymalny");
+                    }
+                    else {
+                        System.out.println(" koszt ulepszenia : " +
+                                infantry_stats[player.stats.get(type).getLevel()].getUpgreade_cost());
+                    }
+                }
+                case CAVLARY -> {
+                    if(player.stats.get(type).getLevel() == 3){
+                        System.out.println(", osiagnieto poziom maksymalny");
+                    }
+                    else {
+                        System.out.println(" koszt ulepszenia : " +
+                            cavlary_stats[player.stats.get(type).getLevel()].getUpgreade_cost());
+                    }
+                }
+                case ARCHER ->{
+                    if(player.stats.get(type).getLevel() == 3){
+                        System.out.println(", osiagnieto poziom maksymalny");
+                    }
+                    else {
+                        System.out.println(" koszt ulepszenia : " +
+                                archers_stats[player.stats.get(type).getLevel()].getUpgreade_cost());
+                    }
+                }
+            }
         }
 
         int typeIndex = scanner.nextInt();
-        if (typeIndex < 0 || typeIndex >= TypeOfUnit.values().length) {
+        if (typeIndex < 1 || typeIndex > TypeOfUnit.values().length) {
             System.out.println("❌ Zły typ.");
             return;
         }
 
-        TypeOfUnit chosen = TypeOfUnit.values()[typeIndex];
+        TypeOfUnit chosen = TypeOfUnit.values()[typeIndex - 1];
+
+        if(player.stats.get(chosen).getLevel() == 3){
+            System.out.println("Poziom ma już maksymalną wartość");
+            return;
+        }
+
+        int price = 0;
+        switch(chosen){
+            case INFANTRY -> {
+                price = infantry_stats[player.stats.get(chosen).getLevel()].getUpgreade_cost();
+            }
+            case CAVLARY -> {
+                price = cavlary_stats[player.stats.get(chosen).getLevel()].getUpgreade_cost();
+            }
+            case ARCHER -> {
+                price = archers_stats[player.stats.get(chosen).getLevel()].getUpgreade_cost();
+            }
+        }
+
         player.stats.get(chosen).upgradeStats(1, 1, 1);
+        applyHeroClassBonusByUnit(player, chosen);
+        player.stats.get(chosen).increase_level();
         player.recalculateOverallStats();
-        player.owner.removeDukaty(50);
-        System.out.println("✅ Ulepszono jednostki typu: " + chosen);
+        player.owner.removeDukaty(price);
+        System.out.println("✅ Ulepszono jednostki typu: " + chosen + ", pobrano " + price + " dukatów");
+
+
+
+
     }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class Unit {
     private Stats stats;
+    private int level;
     private TypeOfUnit typeOfUnit;
 
     public Unit(TypeOfUnit type, int level) {
@@ -45,4 +46,6 @@ public class Unit {
     public Stats getStats() {
         return stats;
     }
+
+    public int getLevel() {return level;}
 }

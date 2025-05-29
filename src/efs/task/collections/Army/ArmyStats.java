@@ -7,6 +7,7 @@ import efs.task.collections.Units.*;
 
 
 public class ArmyStats {
+    int level;
     private double damege; //sum
     private double defense; //sum
     private int sum_of_speed;
@@ -33,20 +34,30 @@ public class ArmyStats {
         return sum_of_speed;
     }
 
-    public ArmyStats(double damege, double defense, int sum_of_speed, int quantity) {
+    public int getLevel() {
+        return level;
+    }
+
+    public void increase_level() {
+        level++;
+    }
+
+    public ArmyStats(double damege, double defense, int sum_of_speed, int quantity, int level) {
         this.damege = damege;
         this.defense = defense;
         this.sum_of_speed = sum_of_speed;
         this.quantity = quantity;
         this.speed = quantity == 0 ? 0 : (double) sum_of_speed / quantity;
-
+        this.level = level;
     }
+
 
     public void update_stats_by_unit(Stats stats) {
         this.damege += stats.getDamege();
         this.defense += stats.getDefense();
         this.sum_of_speed += stats.getSpeed();
         this.quantity += 1;
+        this.level = stats.getLevel();
         this.speed = (double)sum_of_speed / quantity;
     }
     // Dodaje podsumowane statystyki innej grupy jednostek
@@ -55,6 +66,7 @@ public class ArmyStats {
         this.defense += other.defense;
         this.sum_of_speed += other.sum_of_speed;
         this.quantity += other.quantity;
+        this.level = other.level;
         this.speed = quantity > 0 ? (double) sum_of_speed / quantity : 0;
     }
 
@@ -86,6 +98,14 @@ public class ArmyStats {
 
 
     public void upgradeStats(int i, int i1, int i2) {
+        damege += i ;
+        defense += i1 ;
+        sum_of_speed += i2 ;
+        speed = quantity == 0 ? 0 : (double) sum_of_speed / quantity;
+
+    }
+
+    public void upgradeStatsByUnit(int i, int i1, int i2, TypeOfUnit type) {
         damege += i ;
         defense += i1 ;
         sum_of_speed += i2 ;
