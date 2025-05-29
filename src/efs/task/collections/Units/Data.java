@@ -1,5 +1,7 @@
 package efs.task.collections.Units;
 
+import java.util.Map;
+
 public class Data {
 
     public static final Stats[] infantry_stats = {
@@ -19,5 +21,11 @@ public class Data {
             new Stats(2,1,3,2, 140, 60),
             new Stats(3,2,4,3, 210, 90)
     };
+
+    public static final Map<TypeOfUnit, Stats[]> statsMap = Map.of(
+            TypeOfUnit.INFANTRY, infantry_stats,
+            TypeOfUnit.CAVLARY, cavlary_stats,
+            TypeOfUnit.ARCHER, archers_stats
+    );
 
 }

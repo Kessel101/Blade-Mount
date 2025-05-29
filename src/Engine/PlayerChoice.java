@@ -1,9 +1,11 @@
 package Engine;
 
 import Map.GameMap;
+import efs.task.collections.Army.ArmyStats;
 import efs.task.collections.Army.Retinue;
 import efs.task.collections.Army.RetinueMenager;
 import efs.task.collections.Army.RetinueUtils;
+import efs.task.collections.Units.Data;
 import efs.task.collections.Units.TypeOfUnit;
 import efs.task.collections.Units.Unit;
 
@@ -43,8 +45,8 @@ public class PlayerChoice {
             System.out.println("\nLiczba dukatów: " + player.owner.getDukaty());
             System.out.println("🎮 Co chcesz zrobić?");
             System.out.println("1. Przemieść się");
-            System.out.println("2. Dodaj jednostkę (100 dukatów)");
-            System.out.println("3. Ulepsz jednostki 50 dukatów za typ)");
+            System.out.println("2. Dodaj jednostkę");
+            System.out.println("3. Ulepsz jednostki");
             System.out.println("4. Pokaz mape");
             System.out.println("5. Pokaż siłę wojska");
             System.out.println("6. Pokaż stan armii");
@@ -148,27 +150,49 @@ public class PlayerChoice {
 
 
     private static void addUnit(Retinue player) {
-        if (player.owner.getDukaty() < 100) {
-            System.out.println("❌ Za mało dukatów!");
-            return;
-        }
+        // Wyświetlamy ile gracz ma dukatów
+        System.out.println("💰 Dukaty: " + player.owner.getDukaty());
 
-        System.out.println("🪖 Wybierz typ jednostki:");
+        // Budujemy menu z kosztami wg poziomu
+        System.out.println("Wybierz typ jednostki do rekrutacji:");
         for (TypeOfUnit type : TypeOfUnit.values()) {
-            System.out.println(type.ordinal() + ". " + type);
+            int level = player.stats.get(type).getLevel();
+            int cost  = Data.statsMap.get(type)[level - 1].getHirering_cost();
+            System.out.printf("%d. %-8s (poziom %d, koszt %d)%n",
+                    type.ordinal()+1, type, level, cost);
         }
 
-        int typeIndex = scanner.nextInt();
-        if (typeIndex < 0 || typeIndex >= TypeOfUnit.values().length) {
+        // Odczyt wyboru
+        int choice = scanner.nextInt();
+        if (choice < 1 || choice > TypeOfUnit.values().length) {
             System.out.println("❌ Zły typ.");
             return;
         }
+        // Mapowanie na enum
+        TypeOfUnit chosen = TypeOfUnit.values()[choice-1];
+        int level = player.stats.get(chosen).getLevel();
+        System.out.println(level);
 
-        TypeOfUnit chosen = TypeOfUnit.values()[typeIndex];
-        player.owner.removeDukaty(100);
-        player.add_to_retinue(new java.util.ArrayList<>(java.util.List.of(new Unit(chosen, 0))));
-        System.out.println("✅ Dodano jednostkę: " + chosen);
+        int cost  = Data.statsMap.get(chosen)[level - 1].getHirering_cost();
+
+        // Sprawdzenie i pobranie dukatów
+        if (player.owner.getDukaty() < cost) {
+            System.out.println("❌ Za mało dukatów! Potrzeba " + cost);
+            return;
+        }
+        player.owner.removeDukaty(cost);
+
+        // Rekrutacja jednej jednostki na poziomie bazowym tego typu
+        player.add_to_retinue(
+                new java.util.ArrayList<>(
+                        java.util.List.of(new Unit(chosen, level - 1))
+                )
+        );
+
+        System.out.println("✅ Zrekrutowano 1 x " + chosen +
+                " (poziom " + level + "), koszt: " + cost);
     }
+
 
     private static void upgradeUnits(Retinue player) {
         if (player.owner.getDukaty() < 50) {
@@ -178,35 +202,15 @@ public class PlayerChoice {
 
         System.out.println("⚔️ Ulepszanie jednostek (+1 do dmg/def/speed) wszystkich w typie:");
         for (TypeOfUnit type : TypeOfUnit.values()) {
-            System.out.print((type.ordinal() + 1) + " " + type + " ,obecny poziom: " + player.stats.get(type).getLevel());
-            switch (type) {
-                case INFANTRY -> {
-                    if(player.stats.get(type).getLevel() == 3) {
-                        System.out.println(", osiagnieto poziom maksymalny");
-                    }
-                    else {
-                        System.out.println(" koszt ulepszenia : " +
-                                infantry_stats[player.stats.get(type).getLevel()].getUpgreade_cost());
-                    }
-                }
-                case CAVLARY -> {
-                    if(player.stats.get(type).getLevel() == 3){
-                        System.out.println(", osiagnieto poziom maksymalny");
-                    }
-                    else {
-                        System.out.println(" koszt ulepszenia : " +
-                            cavlary_stats[player.stats.get(type).getLevel()].getUpgreade_cost());
-                    }
-                }
-                case ARCHER ->{
-                    if(player.stats.get(type).getLevel() == 3){
-                        System.out.println(", osiagnieto poziom maksymalny");
-                    }
-                    else {
-                        System.out.println(" koszt ulepszenia : " +
-                                archers_stats[player.stats.get(type).getLevel()].getUpgreade_cost());
-                    }
-                }
+            ArmyStats unitStats = player.stats.get(type);
+            int level = unitStats.getLevel();
+            System.out.print((type.ordinal() + 1) + " " + type + ", obecny poziom: " + level);
+
+            if (level >= 3) {
+                System.out.println(", osiągnięto poziom maksymalny");
+            } else {
+                int cost = Data.statsMap.get(type)[level].getUpgreade_cost();
+                System.out.println(", koszt ulepszenia: " + cost);
             }
         }
 
@@ -217,34 +221,25 @@ public class PlayerChoice {
         }
 
         TypeOfUnit chosen = TypeOfUnit.values()[typeIndex - 1];
+        ArmyStats stats = player.stats.get(chosen);
+        int level = stats.getLevel();
 
-        if(player.stats.get(chosen).getLevel() == 3){
+        if (level >= 3) {
             System.out.println("Poziom ma już maksymalną wartość");
             return;
         }
 
-        int price = 0;
-        switch(chosen){
-            case INFANTRY -> {
-                price = infantry_stats[player.stats.get(chosen).getLevel()].getUpgreade_cost();
-            }
-            case CAVLARY -> {
-                price = cavlary_stats[player.stats.get(chosen).getLevel()].getUpgreade_cost();
-            }
-            case ARCHER -> {
-                price = archers_stats[player.stats.get(chosen).getLevel()].getUpgreade_cost();
-            }
+        int price = Data.statsMap.get(chosen)[level].getUpgreade_cost();
+        if (player.owner.getDukaty() < price) {
+            System.out.println("❌ Za mało dukatów na ulepszenie!");
+            return;
         }
 
-        player.stats.get(chosen).upgradeStats(1, 1, 1);
-        applyHeroClassBonusByUnit(player, chosen);
-        player.stats.get(chosen).increase_level();
+        stats.upgradeStats(1, 1, 1);
+        stats.increase_level();
         player.recalculateOverallStats();
         player.owner.removeDukaty(price);
+
         System.out.println("✅ Ulepszono jednostki typu: " + chosen + ", pobrano " + price + " dukatów");
-
-
-
-
     }
 }
