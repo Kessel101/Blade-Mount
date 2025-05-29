@@ -38,8 +38,8 @@ public class PlayerChoice {
 
 
 
-
-            System.out.println("\n🎮 Co chcesz zrobić?");
+            System.out.println("\nLiczba dukatów: " + player.owner.getDukaty());
+            System.out.println("🎮 Co chcesz zrobić?");
             System.out.println("1. Przemieść się");
             System.out.println("2. Dodaj jednostkę (100 dukatów)");
             System.out.println("3. Ulepsz jednostki 50 dukatów za typ)");
