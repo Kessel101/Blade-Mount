@@ -25,6 +25,7 @@ public class PlayerChoice {
     public static void handlePlayerTurn() {
         Retinue player = RetinueMenager.getPlayer();
         boolean end = false;
+        boolean moved = false;
         int spyDelay = 2; // ile tur musi minąć
         String spyStatus;
 
@@ -57,7 +58,7 @@ public class PlayerChoice {
             int choice = scanner.nextInt();
 
             switch (choice) {
-                case 1 -> movePlayer(player);
+                case 1 -> moved = movePlayer(player, moved);
                 case 2 -> addUnit(player);
                 case 3 -> upgradeUnits(player);
                 case 4 -> showMap();
@@ -102,7 +103,13 @@ public class PlayerChoice {
         GameMap.updateMap(RetinueMenager.getList(), RetinueMenager.getPlayer());
         GameMap.displayMap();
     }
-    private static void movePlayer(Retinue player) {
+    private static boolean movePlayer(Retinue player, boolean moved) {
+        if (moved) {
+            System.out.println("Wykonano już przemieszczenie w tej turze!");
+            return true;
+        }
+        moved = false;
+
         int speed = (int) player.overal_army_tats.getSpeed();
         System.out.println("📍 Obecna pozycja: (" + player.getX() + ", " + player.getY() + ")");
         System.out.println("👣 Maksymalny ruch: " + speed + " pól");
@@ -131,6 +138,7 @@ public class PlayerChoice {
             } else {
                 player.setPosition(dx, dy);
                 System.out.println("✅ Przemieszczono na (" + player.getX() + ", " + player.getY() + ")");
+                moved = true;
             }
         } else {
             System.out.println("❌ Zbyt duży ruch! Maksymalnie " + speed + " pól.");
@@ -145,7 +153,7 @@ public class PlayerChoice {
             GameMap.treasureCollected = true;
         }
 
-
+        return moved;
     }
 
 
