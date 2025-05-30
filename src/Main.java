@@ -1,4 +1,5 @@
 
+import Engine.SoundManager;
 import Map.GameMap;
 import efs.task.collections.Army.Retinue;
 import efs.task.collections.Army.RetinueMenager;
@@ -17,6 +18,10 @@ import static Engine.PlayerChoice.scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+        SoundManager sound = new SoundManager();
+        sound.load("/sounds/Runes of Magic OST - Bridge of Varanas (Entrance).wav");
+        sound.loop();
 
         //RetinueMenager retinueMenager = new RetinueMenager();
         System.out.println("🎖️ Wybierz klasę swojego bohatera:");
@@ -74,9 +79,13 @@ public class Main {
         }
 
 
+
         for(int i=0; i<100;i++){
             TurnManager.nextTurn();
 
         }
+
+        sound.stop();
+        sound.close();
     }
 }
