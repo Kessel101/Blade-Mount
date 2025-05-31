@@ -24,7 +24,7 @@ public class Main {
         sound.loop();
 
         //RetinueMenager retinueMenager = new RetinueMenager();
-        System.out.println("🎖️ Wybierz klasę swojego bohatera:");
+        System.out.println("\nWybierz klasę swojego bohatera:\n");
         HeroClass[] classes = HeroClass.values();
         for (int i = 0; i < classes.length; i++) {
             System.out.println(i + ". " + classes[i]);

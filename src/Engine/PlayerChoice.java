@@ -44,7 +44,7 @@ public class PlayerChoice {
 
 
             System.out.println("\nLiczba dukatów: " + player.owner.getDukaty());
-            System.out.println("🎮 Co chcesz zrobić?");
+            System.out.println("Co chcesz zrobić?");
             System.out.println("1. Przemieść się");
             System.out.println("2. Dodaj jednostkę");
             System.out.println("3. Ulepsz jednostki");
@@ -67,7 +67,7 @@ public class PlayerChoice {
                 case 7 -> displayArmies();
 
                 case 0 -> end = true;
-                default -> System.out.println("❌ Nieznana komenda.");
+                default -> System.out.println("Nieznana komenda.");
             }
         }
 
@@ -75,23 +75,23 @@ public class PlayerChoice {
     private static void displayArmies() {
         if (spySentTurn == -1) {
             spySentTurn = TurnManager.currentTurn;
-            System.out.println("🕵️‍♂️ Szpieg został wysłany. Raport będzie za 2 tury.");
+            System.out.println("Szpieg został wysłany. Raport będzie za 2 tury.");
         } else if (TurnManager.currentTurn - spySentTurn >= 2) {
-            System.out.println("📜 Raport szpiega:");
+            System.out.println("Raport szpiega:");
             for (Retinue retinue : RetinueMenager.getList()) {
                 retinue.displayArmyStats();
             }
             spySentTurn = -1; // reset szpiega
         } else {
-            System.out.println("⌛ Szpieg w drodze. Raport dostępny za " + (2 - (TurnManager.currentTurn - spySentTurn)) + " tury.");
+            System.out.println("Szpieg w drodze. Raport dostępny za " + (2 - (TurnManager.currentTurn - spySentTurn)) + " tury.");
         }
     }
 
     private static void showArmyStrength() {
         Retinue player = RetinueMenager.getPlayer();
-        System.out.println("🟢 Twoja siła armii: " + player.overal_army_tats.totalPower());
+        System.out.println("Twoja siła armii: " + player.overal_army_tats.totalPower());
 
-        System.out.println("\n🔴 Przeciwnicy:");
+        System.out.println("\nPrzeciwnicy:");
         for (Retinue r : RetinueMenager.getList()) {
             if (r != player) {
                 System.out.println("- " + r.owner.getName() + ": " + r.overal_army_tats.totalPower());
@@ -111,8 +111,8 @@ public class PlayerChoice {
         moved = false;
 
         int speed = (int) player.overal_army_tats.getSpeed();
-        System.out.println("📍 Obecna pozycja: (" + player.getX() + ", " + player.getY() + ")");
-        System.out.println("👣 Maksymalny ruch: " + speed + " pól");
+        System.out.println("Obecna pozycja: (" + player.getX() + ", " + player.getY() + ")");
+        System.out.println("Maksymalny ruch: " + speed + " pól");
         System.out.print("Podaj dx: ");
         int dx = scanner.nextInt();
         System.out.print("Podaj dy: ");
@@ -131,24 +131,24 @@ public class PlayerChoice {
                 }
             }
             if(newX>GameMap.HEIGHT || newX<0 || newY>GameMap.HEIGHT || newY<0) {
-                System.out.println("❌ Nie możesz opuscic pola walki!");
+                System.out.println("Nie możesz opuscic pola walki!");
             }
             else if (kolizja) {
-                System.out.println("❌ Nie możesz wejść na pole zajęte przez wroga!");
+                System.out.println("Nie możesz wejść na pole zajęte przez wroga!");
             } else {
                 player.setPosition(dx, dy);
-                System.out.println("✅ Przemieszczono na (" + player.getX() + ", " + player.getY() + ")");
+                System.out.println("Przemieszczono na (" + player.getX() + ", " + player.getY() + ")");
                 moved = true;
             }
         } else {
-            System.out.println("❌ Zbyt duży ruch! Maksymalnie " + speed + " pól.");
+            System.out.println("Zbyt duży ruch! Maksymalnie " + speed + " pól.");
         }
 
         if (!GameMap.treasureCollected
                 && (int) player.getX() == GameMap.treasureX
                 && (int) player.getY() == GameMap.treasureY) {
 
-            System.out.println("🎉 ZNALAZŁEŚ SKARB! Otrzymujesz 100 dukatów!");
+            System.out.println("ZNALAZŁEŚ SKARB! Otrzymujesz 100 dukatów!");
             player.owner.giveDukaty(100);
             GameMap.treasureCollected = true;
         }
@@ -158,10 +158,9 @@ public class PlayerChoice {
 
 
     private static void addUnit(Retinue player) {
-        // Wyświetlamy ile gracz ma dukatów
-        System.out.println("💰 Dukaty: " + player.owner.getDukaty());
+        System.out.println("Dukaty: " + player.owner.getDukaty());
 
-        // Budujemy menu z kosztami wg poziomu
+        // menu z kosztami wg poziomu
         System.out.println("Wybierz typ jednostki do rekrutacji:");
         for (TypeOfUnit type : TypeOfUnit.values()) {
             int level = player.stats.get(type).getLevel();
@@ -170,22 +169,22 @@ public class PlayerChoice {
                     type.ordinal()+1, type, level, cost);
         }
 
-        // Odczyt wyboru
+        // odczyt wyboru
         int choice = scanner.nextInt();
         if (choice < 1 || choice > TypeOfUnit.values().length) {
-            System.out.println("❌ Zły typ.");
+            System.out.println("Zły typ.");
             return;
         }
-        // Mapowanie na enum
+        // mapowanie na enum
         TypeOfUnit chosen = TypeOfUnit.values()[choice-1];
         int level = player.stats.get(chosen).getLevel();
         System.out.println(level);
 
         int cost  = Data.statsMap.get(chosen)[level - 1].getHirering_cost();
 
-        // Sprawdzenie i pobranie dukatów
+        // pobranie dukatów
         if (player.owner.getDukaty() < cost) {
-            System.out.println("❌ Za mało dukatów! Potrzeba " + cost);
+            System.out.println("Za mało dukatów! Potrzeba " + cost);
             return;
         }
         player.owner.removeDukaty(cost);
@@ -197,18 +196,18 @@ public class PlayerChoice {
                 )
         );
 
-        System.out.println("✅ Zrekrutowano 1 x " + chosen +
+        System.out.println("Zrekrutowano 1 x " + chosen +
                 " (poziom " + level + "), koszt: " + cost);
     }
 
 
     private static void upgradeUnits(Retinue player) {
         if (player.owner.getDukaty() < 50) {
-            System.out.println("❌ Za mało dukatów!");
+            System.out.println("Za mało dukatów!");
             return;
         }
 
-        System.out.println("⚔️ Ulepszanie jednostek (+1 do dmg/def/speed) wszystkich w typie:");
+        System.out.println("Ulepszanie jednostek (+1 do dmg/def/speed) wszystkich w typie:");
         for (TypeOfUnit type : TypeOfUnit.values()) {
             ArmyStats unitStats = player.stats.get(type);
             int level = unitStats.getLevel();
@@ -224,7 +223,7 @@ public class PlayerChoice {
 
         int typeIndex = scanner.nextInt();
         if (typeIndex < 1 || typeIndex > TypeOfUnit.values().length) {
-            System.out.println("❌ Zły typ.");
+            System.out.println("Zły typ.");
             return;
         }
 
@@ -239,7 +238,7 @@ public class PlayerChoice {
 
         int price = Data.statsMap.get(chosen)[level].getUpgreade_cost();
         if (player.owner.getDukaty() < price) {
-            System.out.println("❌ Za mało dukatów na ulepszenie!");
+            System.out.println("Za mało dukatów na ulepszenie!");
             return;
         }
 
@@ -248,6 +247,6 @@ public class PlayerChoice {
         player.recalculateOverallStats();
         player.owner.removeDukaty(price);
 
-        System.out.println("✅ Ulepszono jednostki typu: " + chosen + ", pobrano " + price + " dukatów");
+        System.out.println("Ulepszono jednostki typu: " + chosen + ", pobrano " + price + " dukatów");
     }
 }

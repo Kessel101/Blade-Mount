@@ -76,14 +76,13 @@ public class ArmyStats {
 
     public void removeUnits(int count) {
         if (count >= quantity) {
-            // usuwamy wszystkie jednostki
+            // usuwanie wszystkich jednostek
             quantity = 0;
             damege = 0;
             defense = 0;
             sum_of_speed = 0;
             speed = 0;
         } else {
-            // usuwamy proporcjonalnie
             double unitDmg = damege / quantity;
             double unitDef = defense / quantity;
             double unitSpeed = (double) sum_of_speed / quantity;

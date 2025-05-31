@@ -8,7 +8,7 @@ import efs.task.collections.Army.RetinueMenager;
 public class Battles {
 
     public static void simulateBattles(Retinue r1, Retinue r2) {
-        System.out.println("\n🔱 Bitwa między " + r1.owner.getName() + " a " + r2.owner.getName() + "!");
+        System.out.println("\n Bitwa między " + r1.owner.getName() + " a " + r2.owner.getName() + "!");
 
         for (TypeOfUnit type : TypeOfUnit.values()) {
             ArmyStats stats1 = r1.stats.get(type);
@@ -25,7 +25,7 @@ public class Battles {
             double power1 = (stats1.getDamege() * multiplier1) + stats1.getDefense();
             double power2 = (stats2.getDamege() * multiplier2) + stats2.getDefense();
 
-            System.out.printf("⚔️ Pojedynek %s (%s) vs %s (%s)\n", r1.owner.getName(), type, r2.owner.getName(), targetType);
+            System.out.printf("Pojedynek %s (%s) vs %s (%s)\n", r1.owner.getName(), type, r2.owner.getName(), targetType);
             System.out.printf("Siła %s: %.2f vs Siła %s: %.2f\n", r1.owner.getName(), power1, r2.owner.getName(), power2);
 
             if (power1 > power2) {
@@ -40,11 +40,11 @@ public class Battles {
                 int lost = 1;
                 if (stats1.getQuantity() > 0) {
                     stats1.removeUnits(lost);
-                    System.out.println("⚖️ Remis – " + r1.owner.getName() + " traci 1 jednostkę typu " + type);
+                    System.out.println("Remis – " + r1.owner.getName() + " traci 1 jednostkę typu " + type);
                 }
                 if (stats2.getQuantity() > 0) {
                     stats2.removeUnits(lost);
-                    System.out.println("⚖️ Remis – " + r2.owner.getName() + " traci 1 jednostkę typu " + targetType);
+                    System.out.println("Remis – " + r2.owner.getName() + " traci 1 jednostkę typu " + targetType);
                 }
             }
         }
@@ -52,16 +52,16 @@ public class Battles {
         r1.recalculateOverallStats();
         r2.recalculateOverallStats();
         if (r1.overal_army_tats.getQuantity() <= 0) {
-            System.out.println("💀 " + r1.owner.getName() + " został pokonany i usunięty z mapy. Koniec gry.");
+            System.out.println(r1.owner.getName() + " został pokonany i usunięty z mapy. Koniec gry.");
             System.exit(0);
            // RetinueMenager.remove(r1);
         }
         if (r2.overal_army_tats.getQuantity() <= 0) {
-            System.out.println("💀 " + r2.owner.getName() + " został pokonany i usunięty z mapy.");
+            System.out.println(r2.owner.getName() + " został pokonany i usunięty z mapy.");
             //RetinueMenager.remove(r2);
         }
 
-        //System.out.println("\n📊 Stan armii po bitwie:");
+        //System.out.println("\n Stan armii po bitwie:");
        // r1.displayArmyStats();
         //r2.displayArmyStats();
 

@@ -26,7 +26,7 @@ public class Retinue {
         stats.put(TypeOfUnit.INFANTRY, new ArmyStats(0, 0, 0, 0, 0));
         stats.put(TypeOfUnit.CAVLARY, new ArmyStats(0, 0, 0, 0, 0));
 
-        // Metoda do dodawania jednostek do armii
+        //dodawanie jednostek do armii
         for (Unit unit : units) {
             stats.get(unit.getTypeOfUnit()).update_stats_by_unit(unit.getStats());
             overal_army_tats.update_stats_by_unit(unit.getStats());
@@ -42,23 +42,24 @@ public class Retinue {
 
     }
 
-    // Metoda wypisująca statystyki armii
+    //wypisywanie statystyk armii
     public void displayArmyStats() {
-        System.out.println("Armia " + owner.getName() + ":");
+        System.out.println("\n  Armia " + owner.getName() + ":");
         System.out.println("Ogólne statystyki armii:");
         System.out.println("Obrażenia: " + overal_army_tats.getDamege());
         System.out.println("Obrona: " + overal_army_tats.getDefense());
         System.out.println("Szybkość: " + overal_army_tats.getSpeed());
         System.out.println("Ilość jednostek: " + overal_army_tats.getQuantity());
 
-        System.out.println("\nStatystyki jednostek:");
+        System.out.println("\n  Statystyki jednostek:");
         for (TypeOfUnit type : stats.keySet()) {
             ArmyStats unitStats = stats.get(type);
-            System.out.println(type + ":");
+            System.out.println(" " + type + ":");
+            System.out.println("Poziom: " + unitStats.getLevel());
             System.out.println("Obrażenia: " + unitStats.getDamege());
             System.out.println("Obrona: " + unitStats.getDefense());
             System.out.println("Szybkość: " + unitStats.getSpeed());
-            System.out.println("Ilość: " + unitStats.getQuantity());
+            System.out.println("Ilość: " + unitStats.getQuantity() + "\n");
         }
     }
 

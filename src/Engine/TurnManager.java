@@ -13,10 +13,8 @@ import static Engine.randomEvents.triggerRandomEvent;
 
 public class TurnManager {
 
-    // Zmienna statyczna dla przechowywania obecnej tury
     public static int currentTurn = 0;
 
-    // Metoda do przejścia do następnej tury
     public static void nextTurn() {
         handlePlayerTurn();
         currentTurn++;
@@ -25,11 +23,10 @@ public class TurnManager {
         Iterator<Retinue> it = RetinueMenager.getList().iterator();
         while (it.hasNext()) {
             Retinue retinue = it.next();
-            if (RetinueUtils.distance(player, retinue) < 3) {
+            if (RetinueUtils.distance(player, retinue) < 2) {
                 simulateBattles(player, retinue);
                 if (retinue.overal_army_tats.getQuantity() <= 0) {
-                    //System.out.println("💀 " + retinue.owner.getName() + " został pokonany i usunięty z mapy.");
-                    it.remove(); // to jest kluczowe – bezpieczne usunięcie z listy podczas iteracji
+                    it.remove();
                 }
             }
         }
@@ -43,8 +40,8 @@ public class TurnManager {
         }
 
         if (!anyEnemiesLeft) {
-            System.out.println("\n🎉🎉🎉 GRATULACJE, " + player.owner.getName() + "! POKONAŁEŚ WSZYSTKICH WROGÓW! 🎉🎉🎉");
-            System.out.println("🏆 Zwycięstwo w " + currentTurn + " turach.");
+            System.out.println("\nGRATULACJE, " + player.owner.getName() + "! POKONAŁEŚ WSZYSTKICH WROGÓW!");
+            System.out.println("Zwycięstwo w " + currentTurn + " turach.");
             System.exit(0); // kończy program
         }
 
@@ -54,7 +51,6 @@ public class TurnManager {
             }
         }
 
-        // Tu możesz dodać dodatkowe procesy, jak AI, zdarzenia czy generowanie zasobów
         System.out.println("Aktualna tura: " + currentTurn);
         Resources.refillPlayer(currentTurn);
         Resources.refillEnemies(currentTurn);
@@ -62,7 +58,6 @@ public class TurnManager {
         sleep(100); // Czekaj przez 100 milisekund
     }
 
-    // Funkcja do usypiania wątku na określony czas
     public static void sleep(int millis) {
         try {
             Thread.sleep(millis);

@@ -14,7 +14,6 @@ public class Hero {
         this.ducats = ducats;
         this.heroStats = heroStats;
         this.heroClass = heroClass;
-
     }
 
 

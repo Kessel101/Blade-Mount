@@ -28,7 +28,7 @@ public class AIMoves {
         }
 
         // Ocena siły
-        int enemyStrength = (int) enemy.overal_army_tats.totalPower(); // załóżmy, że masz taką metodę
+        int enemyStrength = (int) enemy.overal_army_tats.totalPower();
         int playerStrength = (int) player.overal_army_tats.totalPower();
 
         boolean shouldApproach = rand.nextDouble() < calculateAggressionChance(enemyStrength, playerStrength);
@@ -58,14 +58,14 @@ public class AIMoves {
     }
 
     private static double calculateAggressionChance(int enemyPower, int playerPower) {
-        if (enemyPower >= playerPower) return 0.9; // silny -> agresywny
+        if (enemyPower >= playerPower) return 0.9; // silny to agresywny
         double ratio = (double) enemyPower / playerPower;
         return 0.3 * ratio; // im słabszy, tym mniej agresywny
     }
 
-    /**
-     * Oblicza najlepszy ruch w kierunku (lub od) gracza
-     */
+
+    //Oblicza najlepszy ruch w kierunku (lub od) gracza
+
     private static int[] calculateBestMove(int ex, int ey, int px, int py, int speed, boolean flee) {
         int dx = px - ex;
         int dy = py - ey;

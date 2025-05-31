@@ -7,10 +7,6 @@ import java.net.URL;
 public class SoundManager {
     private Clip clip;
 
-    /**
-     * Ładuje plik WAV z klasypath (resources).
-     * @param resourcePath ścieżka względna w resources, np. "/sounds/background.wav"
-     */
     public void load(String resourcePath) {
         try {
             URL url = getClass().getResource(resourcePath);
@@ -24,7 +20,6 @@ public class SoundManager {
         }
     }
 
-    /** Odtwórz od początku, raz */
     public void play() {
         if (clip == null) return;
         if (clip.isRunning()) clip.stop();
@@ -32,7 +27,6 @@ public class SoundManager {
         clip.start();
     }
 
-    /** Zapętl odtwarzanie bez przerwy */
     public void loop() {
         if (clip == null) return;
         if (clip.isRunning()) clip.stop();
@@ -40,14 +34,12 @@ public class SoundManager {
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
-    /** Zatrzymaj odtwarzanie */
     public void stop() {
         if (clip != null && clip.isRunning()) {
             clip.stop();
         }
     }
 
-    /** Zwolnij zasoby */
     public void close() {
         if (clip != null) {
             clip.close();
